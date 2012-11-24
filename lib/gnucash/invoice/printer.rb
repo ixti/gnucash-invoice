@@ -2,7 +2,7 @@ module GnuCash
   class Invoice
     class Printer
       def initialize invoice_id
-        @invoice = Invoice.find_by_id(invoice_id)
+        @invoice = Invoice.find(invoice_id)
       end
 
 

@@ -20,6 +20,8 @@ module GnuCash
 
 
     def initialize data
+      @raw        = data
+
       @id         = data[:id]
       @opened_at  = from_timestamp data[:date_opened]
       @posted_at  = from_timestamp data[:date_posted]
@@ -31,8 +33,13 @@ module GnuCash
     end
 
 
+    def customer
+      @customer ||= Customer.find @raw[:owner_guid]
+    end
+
+
     def to_s
-      s = "##{id} [OPENED AT: #{opened_at}]"
+      s = "##{id} #{customer.name} [OPENED AT: #{opened_at}]"
 
       if posted?
         s << " [POSTED AT: #{posted_at}]"
@@ -47,9 +54,9 @@ module GnuCash
     end
 
 
-    def self.find_by_id id
+    def self.find id
       unless data = dataset.where(:id => id).first
-        raise InvoiceNotFound, "Unknown ID #{id}"
+        raise InvoiceNotFound, "ID: #{id}"
       end
 
       new(data)
