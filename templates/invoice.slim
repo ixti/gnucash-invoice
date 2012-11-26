@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    title = invoice.id
+    style type="text/css" = asset('main.css')
+  body
+    .container
+
+      .row
+        .span12
+          table.table.table-condensed
+            thead
+              th Date
+              th Description
+              th Action
+              th Quantity
+              th Unit Price
+              th Subtotal
+            tbody
+              - for entry in invoice.entries do
+                tr
+                  td = entry.date
+                  td = entry.description
+                  td = entry.action
+                  td = entry.quantity
+                  td EUR #{entry.price}
+                  td EUR #{entry.total}
+              tr.total
+                td colspan=5 TOTAL
+                td EUR #{invoice.total}
+
+      - unless invoice.notes.empty?
+        .row
+          .span12
+            #notes
+              h3 Notes
+              p = invoice.notes

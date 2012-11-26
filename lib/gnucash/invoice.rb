@@ -16,7 +16,7 @@ module GnuCash
     include Timestamps
 
 
-    attr_reader :id, :opened_at, :posted_at
+    attr_reader :raw, :id, :opened_at, :posted_at, :notes
 
 
     def initialize data
@@ -25,6 +25,7 @@ module GnuCash
       @id         = data[:id]
       @opened_at  = from_timestamp data[:date_opened]
       @posted_at  = from_timestamp data[:date_posted]
+      @notes      = data[:notes]
     end
 
 
@@ -35,6 +36,16 @@ module GnuCash
 
     def customer
       @customer ||= Customer.find @raw[:owner_guid]
+    end
+
+
+    def entries
+      @entries ||= Entry.find @raw[:guid]
+    end
+
+
+    def total
+      entries.inject(0){ |memo,entry| memo + entry.total }
     end
 
 

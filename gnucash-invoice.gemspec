@@ -12,9 +12,11 @@ Gem::Specification.new do |gem|
   gem.description   = %q{GnuCash invoice printer for human beings.}
 
   gem.add_dependency "sequel",      "~> 3.41"
-  gem.add_dependency "sprockets",   "~> 2.8"
   gem.add_dependency "slim",        "~> 1.3"
+  gem.add_dependency 'sass',        '~> 3.2'
+  gem.add_dependency "sprockets",   "~> 2.8"
 
+  gem.add_development_dependency "sqlite3"
   gem.add_development_dependency "rake"
 
   gem.files         = `git ls-files`.split($\)
