@@ -27,7 +27,12 @@ Print out invoice by it's number:
 ## TODO
 
 * TESTS!!!
-* Extract models into separate gem with multi-backend support.
+* Fix models backend to allow specify db host:port
+* ??? Add backend for old-school XML format
+* Use currency from an account book instead of hardcoded
+* ??? Export into FreshBooks
+* Built-in several templates
+* Allow specify foot notice (using markdown)
 
 
 ## Contributing
