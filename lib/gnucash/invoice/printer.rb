@@ -11,7 +11,7 @@ module GnuCash
       end
 
 
-      def asset pathname
+      def embedded_asset pathname
         environment[pathname].to_s
       end
 
@@ -26,7 +26,11 @@ module GnuCash
 
       def render
         template = Slim::Template.new template_dir('invoice.slim').to_s
-        template.render(self, :invoice => @invoice)
+        template.render(self, {
+          :invoice  => @invoice,
+          :entries  => @invoice.entries,
+          :customer => @invoice.customer
+        })
       end
 
 

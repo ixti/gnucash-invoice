@@ -1,6 +1,10 @@
 //= require normalize
 //= require bootstrap
 
+.customer {
+  text-align: right;
+}
+
 tr.total td {
   background-color: #fafafa;
   border-top-width: 2px;

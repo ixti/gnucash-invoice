@@ -18,6 +18,16 @@ module GnuCash
       end
 
 
+      def address_lines
+        @address_lines ||= [].tap do |lines|
+          (1..4).each do |i|
+            id = :"addr_addr#{i}"
+            lines << @raw[id] if @raw[id]
+          end
+        end
+      end
+
+
       alias :to_s :name
 
 

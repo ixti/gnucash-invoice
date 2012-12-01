@@ -2,9 +2,16 @@ doctype html
 html
   head
     title = invoice.id
-    style type="text/css" = asset('main.css')
+    style type="text/css" = embedded_asset('main.css')
   body
     .container
+      .row
+        .span6.offset6.customer
+          address
+            strong = customer.name
+            - for addr in customer.address_lines
+              br
+              = addr
 
       .row
         .span12
@@ -17,17 +24,17 @@ html
               th Unit Price
               th Subtotal
             tbody
-              - for entry in invoice.entries do
+              - for entry in entries do
                 tr
                   td = entry.date
                   td = entry.description
                   td = entry.action
                   td = entry.quantity
-                  td EUR #{entry.price}
-                  td EUR #{entry.total}
+                  td € #{entry.price}
+                  td € #{entry.total}
               tr.total
                 td colspan=5 TOTAL
-                td EUR #{invoice.total}
+                td: span.price € #{invoice.total}
 
       - unless invoice.notes.empty?
         .row

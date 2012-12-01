@@ -50,13 +50,14 @@ module GnuCash
 
 
     def to_s
-      s = "##{id} #{customer.name} [OPENED AT: #{opened_at}]"
+      open_date = "(#{opened_at.strftime '%Y/%m/%d'})"
+      post_date = ""
 
       if posted?
-        s << " [POSTED AT: #{posted_at}]"
+        post_date = "[#{posted_at.strftime '%Y/%m/%d'}]"
       end
 
-      s
+      "%-16s %-32s %s %s" % [ id, customer.name, open_date, post_date ]
     end
 
 
