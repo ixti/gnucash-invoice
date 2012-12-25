@@ -29,7 +29,8 @@ module GnuCash
         template.render(self, {
           :invoice  => @invoice,
           :entries  => @invoice.entries,
-          :customer => @invoice.customer
+          :customer => @invoice.customer,
+          :options  => Options
         })
       end
 

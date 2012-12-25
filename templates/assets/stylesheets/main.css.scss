@@ -1,13 +1,80 @@
 //= require normalize
-//= require bootstrap
 
-.customer {
-  text-align: right;
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 5%;
+  color: #333333;
+  background-color: #ffffff;
 }
 
-tr.total td {
-  background-color: #fafafa;
-  border-top-width: 2px;
-  font-weight: bold;
-  font-size: 1.1em;
+
+.business {
+  float:      left;
+  text-align: left;
+  width:      50%;
+}
+
+
+.customer {
+  float:      right;
+  text-align: right;
+  width:      50%;
+}
+
+
+.clearfix {
+  height: 2em;
+  clear: both;
+}
+
+
+.info {
+  padding: 1em;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  text-align: center;
+}
+
+
+.entries {
+  width: 100%;
+
+
+  th, td {
+    padding: 6px;
+    line-height: 20px;
+    text-align: left;
+    vertical-align: top;
+    border-top: 1px solid #dddddd;
+  }
+
+  th {
+    font-weight: bold;
+  }
+
+  thead th {
+    vertical-align: bottom;
+  }
+
+  thead:first-child tr:first-child th,
+  thead:first-child tr:first-child td {
+    border-top: 0;
+  }
+
+  .date, .quant, .price {
+    white-space: nowrap;
+  }
+
+  .quant, .price {
+    text-align: center;
+  }
+
+  .total td {
+    background-color: #fafafa;
+    border-top: 1px solid #cccccc;
+    font-weight: bold;
+    font-size: 1.1em;
+  }
 }

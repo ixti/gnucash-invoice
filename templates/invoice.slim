@@ -1,44 +1,51 @@
 doctype html
 html
   head
-    title = invoice.id
+    meta charset="utf-8"
+    title = "#{invoice.id} (#{invoice.posted? ? invoice.posted_at : "DRAFT"})"
     style type="text/css" = embedded_asset('main.css')
   body
-    .container
-      .row
-        .span6.offset6.customer
-          address
-            strong = customer.name
-            - for addr in customer.address_lines
-              br
-              = addr
+    .business
+      address
+        strong = options["Business/Company Name"]
+        - for addr in options["Business/Company Address"].split("\n")
+          br
+          = addr
 
-      .row
-        .span12
-          table.table.table-condensed
-            thead
-              th Date
-              th Description
-              th Action
-              th Quantity
-              th Unit Price
-              th Subtotal
-            tbody
-              - for entry in entries do
-                tr
-                  td = entry.date
-                  td = entry.description
-                  td = entry.action
-                  td = entry.quantity
-                  td € #{entry.price}
-                  td € #{entry.total}
-              tr.total
-                td colspan=5 TOTAL
-                td: span.price € #{invoice.total}
+    .customer
+      address
+        strong = customer.name
+        - for addr in customer.address_lines
+          br
+          = addr
 
-      - unless invoice.notes.empty?
-        .row
-          .span12
-            #notes
-              h3 Notes
-              p = invoice.notes
+    .clearfix
+
+    .info
+      strong Invoice ##{invoice.id}
+      - if invoice.posted?
+        br
+        em = invoice.posted_at
+
+    .clearfix
+
+    table.entries
+      thead
+        th.date Date
+        th Description
+        th Action
+        th.quant Quantity
+        th.price Unit Price
+        th.price Subtotal
+      tbody
+        - for entry in entries do
+          tr
+            td.date = entry.date
+            td = entry.description
+            td = entry.action
+            td.quant = "%0.2f" % entry.quantity
+            td.price = "€ %0.2f" % entry.price
+            td.price = "€ %0.2f" % entry.total
+        tr.total
+          td colspan=5 TOTAL
+          td: span.price = "€ %0.2f" % invoice.total

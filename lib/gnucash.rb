@@ -3,6 +3,7 @@ require 'sequel'
 
 
 # internal
+require 'gnucash/options'
 require 'gnucash/timestamps'
 
 
