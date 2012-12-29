@@ -22,6 +22,14 @@ List all invoices that can be printed:
 Print out invoice by it's number:
 
     $ gnucash-invoice --dbpath /path/to/db.sqlite3 00004 > invoice-00004.html
+    
+Here's how generated invoice will look like:
+
+---
+
+![Example](https://pbs.twimg.com/media/A_PnovSCYAAsQBy.png:large)
+
+---
 
 
 ## TODO
