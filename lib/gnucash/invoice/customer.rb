@@ -7,7 +7,7 @@ module GnuCash
       include Timestamps
 
 
-      attr_reader :id, :name
+      attr_reader :id, :name, :addr_name
 
 
       def initialize data
@@ -15,6 +15,7 @@ module GnuCash
 
         @id         = data[:id]
         @name       = data[:name]
+        @addr_nam   = data[:addr_name]
       end
 
 
