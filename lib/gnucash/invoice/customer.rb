@@ -15,7 +15,7 @@ module GnuCash
 
         @id         = data[:id]
         @name       = data[:name]
-        @addr_nam   = data[:addr_name]
+        @addr_name  = data[:addr_name]
       end
 
 
