@@ -3,6 +3,7 @@ require 'gnucash'
 require 'gnucash/invoice/version'
 require 'gnucash/invoice/entry'
 require 'gnucash/invoice/customer'
+require 'gnucash/invoice/currency'
 require 'gnucash/invoice/supplier'
 require 'gnucash/invoice/printer'
 require 'gnucash/invoice/runner'
@@ -41,6 +42,11 @@ module GnuCash
 
     def entries
       @entries ||= Entry.find @raw[:guid]
+    end
+
+
+    def currency
+      @currency ||= Currency.find @raw[:currency]
     end
 
 

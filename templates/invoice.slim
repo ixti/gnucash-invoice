@@ -44,8 +44,8 @@ html
             td = entry.description
             td = entry.action
             td.quant = "%0.2f" % entry.quantity
-            td.price = "€ %0.2f" % entry.price
-            td.price = "€ %0.2f" % entry.total
+            td.price = "#{invoice.currency} %0.2f" % entry.price
+            td.price = "#{invoice.currency} %0.2f" % entry.total
         tr.total
           td colspan=5 TOTAL
-          td.price = "€ %0.2f" % invoice.total
+          td.price = "#{invoice.currency} %0.2f" % invoice.total
