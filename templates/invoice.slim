@@ -49,3 +49,6 @@ html
         tr.total
           td colspan=5 TOTAL
           td.price = "#{invoice.currency} %0.2f" % invoice.total
+
+    - if invoice.terms
+      p = invoice.terms
