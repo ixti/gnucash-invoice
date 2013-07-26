@@ -4,6 +4,7 @@ require 'gnucash/invoice/version'
 require 'gnucash/invoice/entry'
 require 'gnucash/invoice/customer'
 require 'gnucash/invoice/currency'
+require 'gnucash/invoice/terms'
 require 'gnucash/invoice/supplier'
 require 'gnucash/invoice/printer'
 require 'gnucash/invoice/runner'
@@ -47,6 +48,13 @@ module GnuCash
 
     def currency
       @currency ||= Currency.find @raw[:currency]
+    end
+
+
+    def terms
+      unless @raw[:terms].nil?
+        @terms ||= Terms.find @raw[:terms]
+      end
     end
 
 
