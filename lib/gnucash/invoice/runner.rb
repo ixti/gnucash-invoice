@@ -17,7 +17,7 @@ module GnuCash
 
         # Print out invoice
         unless argv.empty?
-          puts Printer.new(options.invoice_id).render
+          puts Printer.new(options.invoice_id, options.template_path).render
           exit
         end
 
@@ -37,6 +37,9 @@ module GnuCash
         OptionParser.new do |opts|
           opts.on('-d', '--dbpath [DATABASE]', 'SQLite database path') do |path|
             options.dbpath = Pathname.new path
+          end
+          opts.on('-t', '--template [TEMPLATE]', 'Template directory path') do |path|
+            options.template_path = Pathname.new path
           end
         end.parse! argv
 
