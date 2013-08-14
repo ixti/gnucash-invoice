@@ -6,8 +6,9 @@ require 'sprockets'
 module GnuCash
   class Invoice
     class Printer
-      def initialize invoice_id
+      def initialize invoice_id, template_path
         @invoice = Invoice.find(invoice_id)
+        @template_path = template_path.nil? ? 'templates' : template_path
       end
 
 
@@ -39,7 +40,7 @@ module GnuCash
 
 
       def template_dir *args
-        args.unshift 'templates'
+        args.unshift @template_path
         GnuCash.root.join(*args)
       end
     end
