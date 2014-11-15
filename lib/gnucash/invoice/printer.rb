@@ -6,7 +6,7 @@ require 'sprockets'
 module GnuCash
   class Invoice
     class Printer
-      def initialize invoice_id, templates = "templates"
+      def initialize invoice_id, templates
         @invoice   = Invoice.find(invoice_id)
         @templates = GnuCash.root.join(templates)
       end

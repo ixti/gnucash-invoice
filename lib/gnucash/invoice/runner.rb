@@ -1,54 +1,66 @@
 # stdlib
-require 'ostruct'
-require 'optparse'
-require 'pathname'
-
+require "optparse"
 
 module GnuCash
   class Invoice
     module Runner
-      class InvalidArguments < StandardError; end
+      class << self
+        def run(argv)
+          options = parse argv
 
+          unless options[:db]
+            puts "ERROR: No database selected"
+            exit 1
+          end
 
-      def self.run argv
-        options = parse argv
+          GnuCash.connect! options[:db]
 
-        GnuCash.connect! options.dbpath
+          if options[:invoice_id]
+            # Print out invoice
+            puts Printer.new(options[:invoice_id], options[:template]).render
+            exit 0
+          end
 
-        # Print out invoice
-        unless argv.empty?
-          puts Printer.new(options.invoice_id, options.template_path).render
-          exit
+          # Show known invoices
+          Invoice.all.each { |invoice| puts invoice }
+          exit 0
+        rescue Sequel::DatabaseConnectionError
+          puts "ERROR: Can't connect to database: #{options[:db].inspect}"
+          exit 2
+        rescue => e
+          puts "ERROR: #{e}"
+          exit 3
         end
 
-        # Show known invoices
-        Invoice.all.each do |invoice|
-          puts invoice
+        protected
+
+        def parse(argv)
+          options = { :template => "templates" }
+
+          OptionParser.new do |opts|
+            opts.on("--dbpath [DATABASE]",
+              "SQLite database path") do |path|
+              puts "WARNING: --dbpath is deprecated use --db-path instead"
+              options[:db] = path
+            end
+
+            opts.on("-d", "--db-path [DATABASE]",
+              "SQLite database path") do |path|
+              options[:db] = path
+            end
+
+            opts.on("-t", "--template [TEMPLATE]",
+              "Template directory path") do |path|
+              options[:template] = path
+            end
+
+            opts.parse! argv
+          end
+
+          options[:invoice_id] = argv.first
+
+          options
         end
-      end
-
-
-      protected
-
-
-      def self.parse argv
-        options = OpenStruct.new
-
-        OptionParser.new do |opts|
-          opts.on('-d', '--dbpath [DATABASE]', 'SQLite database path') do |path|
-            options.dbpath = Pathname.new path
-          end
-          opts.on('-t', '--template [TEMPLATE]', 'Template directory path') do |path|
-            options.template_path = Pathname.new path
-          end
-        end.parse! argv
-
-        raise InvalidArguments, "No database selected" unless options.dbpath
-        raise InvalidArguments, "Can't find specified database" unless options.dbpath.exist?
-
-        options.invoice_id = argv.first
-
-        options
       end
     end
   end
