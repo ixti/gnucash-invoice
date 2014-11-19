@@ -8,16 +8,16 @@ html
     .business
       address
         strong = options["Business/Company Name"]
-        - for addr in options["Business/Company Address"].split("\n")
+        - for line in options["Business/Company Address"].split("\n")
           br
-          = addr
+          = line
 
     .customer
       address
-        strong = customer.name
-        - for addr in customer.address_lines
+        strong = customer.billing_address.name
+        - for line in customer.billing_address.lines
           br
-          = addr
+          = line
 
     .clearfix
 

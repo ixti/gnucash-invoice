@@ -52,9 +52,7 @@ module GnuCash
 
 
     def terms
-      unless @raw[:terms].nil?
-        @terms ||= Terms.find @raw[:terms]
-      end
+      @terms ||= Terms.find @raw[:terms] unless @raw[:terms].nil?
     end
 
 

@@ -3,50 +3,56 @@ module GnuCash
     class Customer
       class CustomerNotFound < StandardError; end
 
+      class << self
+        def find(guid)
+          attrs = dataset.where(:guid => guid).first
+
+          fail CustomerNotFound, "GUID: #{guid}" unless attrs
+
+          new attrs
+        end
+
+        def dataset
+          GnuCash.connection[:customers]
+        end
+      end
+
+      Address = Struct.new(:name, :phone, :fax, :email, :lines) do
+        def self.build(attrs, prefix)
+          args = %w(name phone fax email).map do |key|
+            attrs[:"#{prefix}_#{key}"].to_s
+          end
+
+          args << (1..4).map do |i|
+            attrs[:"#{prefix}_addr#{i}"].to_s
+          end
+
+          new(*args)
+        end
+      end
 
       include Timestamps
 
+      attr_reader :attrs, :id, :name, :notes
 
-      attr_reader :id, :name, :addr_name
+      require "yaml"
+      def initialize(attrs)
+        @attrs  = attrs
 
-
-      def initialize data
-        @raw        = data
-
-        @id         = data[:id]
-        @name       = data[:name]
-        @addr_name  = data[:addr_name]
+        @id     = attrs[:id]
+        @name   = attrs[:name]
+        @notes  = attrs[:notes]
       end
 
-
-      def address_lines
-        @address_lines ||= [].tap do |lines|
-          (1..4).each do |i|
-            id = :"addr_addr#{i}"
-            lines << @raw[id] if @raw[id]
-          end
-        end
+      def billing_address
+        @address ||= Address.build(attrs, "addr")
       end
 
+      def shipping_address
+        @address ||= Address.build(attrs, "shipaddr")
+      end
 
       alias :to_s :name
-
-
-      def self.find guid
-        unless data = dataset.where(:guid => guid).first
-          raise CustomerNotFound, "GUID: #{guid}"
-        end
-
-        new(data)
-      end
-
-
-      private
-
-
-      def self.dataset
-        GnuCash.connection[:customers]
-      end
     end
   end
 end
