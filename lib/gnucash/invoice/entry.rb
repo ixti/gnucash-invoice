@@ -3,11 +3,9 @@ module GnuCash
     class Entry
       include Timestamps
 
-
       attr_reader :raw, :date, :description, :action, :quantity, :price
 
-
-      def initialize data
+      def initialize(data)
         @raw          = data
 
         @date         = from_timestamp(data[:date]).to_date
@@ -17,22 +15,20 @@ module GnuCash
         @price        = data[:i_price_num].to_f / data[:i_price_denom]
       end
 
-
       def total
         price * quantity
       end
 
+      class << self
+        def find(invoice_guid)
+          dataset.where(:invoice => invoice_guid).map { |data| new(data) }
+        end
 
-      def self.find invoice_guid
-        dataset.where(:invoice => invoice_guid).map{ |data| new(data) }
-      end
+        private
 
-
-      private
-
-
-      def self.dataset
-        GnuCash.connection[:entries]
+        def dataset
+          GnuCash.connection[:entries]
+        end
       end
     end
   end

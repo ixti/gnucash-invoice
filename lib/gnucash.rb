@@ -1,27 +1,24 @@
 # 3rd-party
-require 'sequel'
-
+require "sequel"
 
 # internal
-require 'gnucash/options'
-require 'gnucash/timestamps'
-
+require "gnucash/options"
+require "gnucash/timestamps"
 
 module GnuCash
   class NoDatabaseConnection < StandardError; end
 
+  class << self
+    def connection
+      @connection || fail(NoDatabaseConnection)
+    end
 
-  def self.connection
-    @connection or raise NoDatabaseConnection
-  end
+    def connect!(db)
+      @connection = Sequel.connect "sqlite://#{db}"
+    end
 
-
-  def self.connect! db
-    @connection = Sequel.connect "sqlite://#{db}"
-  end
-
-
-  def self.root
-    @root ||= Pathname.new File.realpath(File.join(__FILE__, '../..'))
+    def root
+      @root ||= Pathname.new File.realpath(File.join(__FILE__, "../.."))
+    end
   end
 end

@@ -32,7 +32,7 @@ module GnuCash
           exit 3
         end
 
-        protected
+        private
 
         def parse(argv)
           options = { :template => "templates" }

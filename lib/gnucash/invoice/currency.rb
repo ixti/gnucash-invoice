@@ -1,32 +1,28 @@
 module GnuCash
   class Invoice
     class Currency
-
       attr_reader :raw, :mnemonic
 
-
-      def initialize data
+      def initialize(data)
         @raw          = data
-
         @mnemonic     = data[:mnemonic]
       end
 
       alias :to_s :mnemonic
 
-      def self.find guid
-        unless data = dataset.where(:guid => guid).first
-          raise CurrencyNotFound, "GUID: #{guid}"
+      class << self
+        def find(guid)
+          data = dataset.where(:guid => guid).first
+          fail CurrencyNotFound, "GUID: #{guid}" unless data
+
+          new(data)
         end
 
-        new(data)
-      end
+        private
 
-
-      private
-
-
-      def self.dataset
-        GnuCash.connection[:commodities]
+        def dataset
+          GnuCash.connection[:commodities]
+        end
       end
     end
   end

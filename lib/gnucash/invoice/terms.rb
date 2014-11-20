@@ -1,32 +1,28 @@
 module GnuCash
   class Invoice
     class Terms
-
       attr_reader :raw, :description
 
-
-      def initialize data
+      def initialize(data)
         @raw          = data
-
         @description  = data[:description]
       end
 
       alias :to_s :description
 
-      def self.find guid
-        unless data = dataset.where(:guid => guid).first
-          raise TermsNotFound, "GUID: #{guid}"
+      class << self
+        def find(guid)
+          data = dataset.where(:guid => guid).first
+          fail TermsNotFound, "GUID: #{guid}" unless data
+
+          new(data)
         end
 
-        new(data)
-      end
+        private
 
-
-      private
-
-
-      def self.dataset
-        GnuCash.connection[:billterms]
+        def dataset
+          GnuCash.connection[:billterms]
+        end
       end
     end
   end
