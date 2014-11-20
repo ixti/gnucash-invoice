@@ -13,7 +13,7 @@ module GnuCash
     private
 
     def parse(str)
-      ::DateTime.strptime str, FORMAT
+      ::DateTime.strptime(str, FORMAT).to_time
     end
   end
 end
