@@ -59,7 +59,7 @@ module GnuCash
       end
     end
 
-    def posted_at?
+    def posted?
       !posted_at.nil?
     end
 
@@ -69,7 +69,7 @@ module GnuCash
 
     def to_s
       open_date = "(#{opened_at.strftime DATE_FMT})"
-      post_date = "[#{posted_at.strftime DATE_FMT}]" if posted_at?
+      post_date = "[#{posted_at.strftime DATE_FMT}]" if posted?
       due_date  =  "X #{self.due_date.strftime DATE_FMT}" if due_date?
 
       format "%-16s %-32s %s %s %s",
