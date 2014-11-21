@@ -44,8 +44,16 @@ module GnuCash
       @terms ||= Terms.find @raw[:terms] unless @raw[:terms].nil?
     end
 
+    def tax
+      entries.reduce(0) { |a, e| a + e.tax.to_f }
+    end
+
+    def subtotal
+      entries.reduce(0) { |a, e| a + e.subtotal.to_f }
+    end
+
     def total
-      entries.reduce(0) { |a, e| a + e.total }
+      entries.reduce(0) { |a, e| a + e.total.to_f }
     end
 
     def due_date

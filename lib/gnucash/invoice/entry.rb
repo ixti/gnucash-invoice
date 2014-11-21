@@ -16,12 +16,33 @@ module GnuCash
       end
 
       def total
-        price * quantity
+        subtotal + tax.to_f
+      end
+
+      def taxable?
+        1 == @raw[:i_taxable].to_i
+      end
+
+      def tax_included?
+        taxable? && 1 == @raw[:i_taxincluded].to_i
+      end
+
+      def tax
+        # to be done
+      end
+
+      def subtotal
+        unless @subtotal
+          @subtotal  = @price * @quantity
+          @subtotal -= tax.to_f if tax_included?
+        end
+
+        @subtotal
       end
 
       class << self
         def find(invoice_guid)
-          dataset.where(:invoice => invoice_guid).map { |data| new(data) }
+          dataset.where(:invoice => invoice_guid).map { |data| new data }
         end
 
         private
