@@ -7,14 +7,33 @@ require "gnucash/timestamps"
 
 module GnuCash
   class NoDatabaseConnection < StandardError; end
+  class NoDatabaseFound < StandardError; end
 
   class << self
     def connection
-      @connection || fail(NoDatabaseConnection)
+      @connection || raise(NoDatabaseConnection)
     end
 
     def connect!(db)
-      @connection = Sequel.connect "sqlite://#{db}"
+      # must check path *before* connecting
+      # File.open(db)
+      raise(NoDatabaseFound, "File not found or unreadable") unless File.readable?(db)
+      @connection = Sequel.connect(
+        adapter:  'sqlite',
+        database:  db,
+        test:      true
+      )
+    end
+
+    def connect_mysql!(host='localhost', user='root', password, db)
+      @connection = Sequel.connect(
+        adapter:   'mysql2',
+        user:      user,
+        host:      host,
+        database:  db,
+        password:  password,
+        test:      true
+      )
     end
 
     def root
