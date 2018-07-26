@@ -25,11 +25,13 @@ module GnuCash
       )
     end
 
-    def connect_mysql!(host='localhost', user='root', password, db)
+    def connect_mysql!(hostport='localhost', user='root', password, db)
+      hp = hostport.split(':')
       @connection = Sequel.connect(
         adapter:   'mysql2',
         user:      user,
-        host:      host,
+        host:      hp[0],
+        port:      hp[1],
         database:  db,
         password:  password,
         test:      true

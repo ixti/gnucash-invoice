@@ -98,13 +98,13 @@ module GnuCash
             end
 
             opts.on(
-              "-t", "--template', '=TEMPLATE",
-              "Template directory path"
+              '-t', '--template', '=TEMPLATE',
+              'Template directory path'
             ) do |path|
               options[:template] = path
             end
 
-            opts.on('-h', '--host', '=HOST', 'MySQL host') do |host|
+            opts.on('-h', '--host', '=HOST[:PORT]', 'MySQL host') do |host|
               # TO-DO: canonicalize URI?
               options[:host] = host
             end
@@ -121,7 +121,7 @@ module GnuCash
               options[:password] = password
             end
 
-            opts.on("-H", "--help", "Prints this help") do
+            opts.on('-H', '--help', 'Prints this help') do
               puts opts
               puts EXAMPLE
               exit
