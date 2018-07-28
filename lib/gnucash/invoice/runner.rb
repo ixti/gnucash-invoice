@@ -44,7 +44,7 @@ module GnuCash
           # Show known invoices
           puts INVOICE_LIST_HDR
           puts INVOICE_LIST_FMT % [
-                 'Invoice ID', 'Customer', 'Billing ID', 'Opened at', 'Posted at',
+                 'Invoice ID', 'Customer', 'Reference', 'Opened at', 'Posted at',
                  'Due at'
                ]
           puts INVOICE_LIST_HDR
@@ -71,6 +71,7 @@ module GnuCash
         def parse(argv)
           options = {
             :adapter    => "sqlite",
+            :host       => "localhost",
             :template   => "templates",
             :user       => "root"
           }
@@ -104,7 +105,10 @@ module GnuCash
               options[:template] = path
             end
 
-            opts.on('-h', '--host', '=HOST[:PORT]', 'MySQL host') do |host|
+            opts.on(
+              '-h', '--host', '=HOST[:PORT]',
+              'MySQL host. Default: "localhost" (PORT ignored with this)'
+            ) do |host|
               # TO-DO: canonicalize URI?
               options[:host] = host
             end
