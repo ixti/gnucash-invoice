@@ -1,9 +1,10 @@
 doctype html
-html
+html lang="en"
   head
     meta charset="utf-8"
     title = "#{invoice.id} (#{invoice.posted? ? invoice.posted_at : "DRAFT"})"
-    style type="text/css" = embedded_asset('main.css')
+      / CSS must not be HTML-escaped
+    style == embedded_asset('main.css')
   body
     .business
       address
@@ -31,12 +32,13 @@ html
 
     table.entries
       thead
-        th.date Date
-        th Description
-        th Action
-        th.quant Quantity
-        th.price Unit Price
-        th.price Subtotal
+        tr
+          th.date Date
+          th Description
+          th Charge Type
+          th.quant Quantity
+          th.price Unit Price
+          th.price Subtotal
       tbody
         - for entry in entries do
           tr
@@ -51,4 +53,4 @@ html
           td.price = "#{invoice.currency} %0.2f" % invoice.total
 
     - if invoice.terms
-      p = invoice.terms
+      p = "Terms: #{invoice.terms}"

@@ -10,6 +10,8 @@ Gem::Specification.new do |gem|
   gem.summary       = "gnucash-invoice-#{GnuCash::Invoice::VERSION}"
   gem.description   = "GnuCash invoice printer for human beings."
 
+  gem.add_dependency "date",        "~> 1.0.0"
+  gem.add_dependency "mysql2",      "~> 0.5.2"
   gem.add_dependency "sequel",      "~> 3.41"
   gem.add_dependency "slim",        "~> 1.3"
   gem.add_dependency "sass",        "~> 3.2"

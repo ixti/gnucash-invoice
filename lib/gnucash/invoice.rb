@@ -1,4 +1,5 @@
 # internal
+require "config"
 require "gnucash"
 require "gnucash/invoice/version"
 require "gnucash/invoice/entry"
@@ -13,16 +14,15 @@ module GnuCash
   class Invoice
     class InvoiceNotFound < StandardError; end
 
-    DATE_FMT = "%Y/%m/%d"
-
     include Timestamps
 
-    attr_reader :raw, :id, :opened_at, :posted_at, :notes
+    attr_reader :raw, :id, :bid, :opened_at, :posted_at, :notes
 
     def initialize(data)
       @raw        = data
 
       @id         = data[:id]
+      @bid        = data[:billing_id]
       @opened_at  = from_timestamp data[:date_opened]
       @posted_at  = from_timestamp data[:date_posted]
       @notes      = data[:notes]
@@ -76,23 +76,23 @@ module GnuCash
     end
 
     def to_s
-      open_date = "(#{opened_at.strftime DATE_FMT})"
-      post_date = "[#{posted_at.strftime DATE_FMT}]" if posted?
-      due_date  =  "X #{self.due_date.strftime DATE_FMT}" if due_date?
+      open_date = opened_at.strftime(DATE_FMT)
+      post_date = posted_at.strftime(DATE_FMT) if posted?
+      due_date  = self.due_date.strftime(DATE_FMT) if due_date?
 
-      format "%-16s %-32s %s %s %s",
-        id, customer.name, open_date, post_date, due_date
+      format INVOICE_LIST_FMT,
+        id, customer.name, bid, open_date, post_date, due_date
     end
 
     class << self
       def all
-        dataset.map { |data| new(data) }
+        dataset.order(:id).map { |data| new(data) }
       end
 
       def find(id)
         data = dataset.where(:id => id).first
 
-        fail InvoiceNotFound, "ID: #{id}" unless data
+        abort(InvoiceNotFound, "ID: #{id}") unless data
 
         new data
       end
